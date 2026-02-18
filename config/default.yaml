@@ -1,0 +1,56 @@
+app:
+  name: "ThreatHawk"
+  version: "1.0.0"
+  debug: true
+
+agent:
+  id: "sentinel-001"
+  heartbeat_interval: 30
+
+collectors:
+  process:
+    enabled: true
+    interval: 10
+    cpu_threshold: 90.0
+    memory_threshold: 85.0
+    suspicious_names:
+      - "mimikatz"
+      - "keylogger"
+      - "pwdump"
+      - "lazagne"
+
+  network:
+    enabled: true
+    interval: 5
+    suspicious_ports:
+      - 4444
+      - 5555
+      - 6666
+      - 1337
+
+  file:
+    enabled: true
+    interval: 15
+    suspicious_extensions:
+      - ".exe"
+      - ".bat"
+      - ".ps1"
+      - ".vbs"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+
+database:
+  url: "sqlite+aiosqlite:///./sentineleye.db"
+
+logging:
+  level: "INFO"
+  file: "logs/sentineleye.log"
+
+threat:
+  score_thresholds:
+    low: 0.3
+    medium: 0.5
+    high: 0.7
+    critical: 0.9

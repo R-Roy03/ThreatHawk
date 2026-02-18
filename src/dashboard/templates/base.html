@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreatHawk - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            background: #111128;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e1e3f;
+        }
+
+        .navbar h1 {
+            color: #00d4ff;
+            font-size: 24px;
+        }
+
+        .navbar h1 span {
+            color: #ff4757;
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .stat-card {
+            background: #111128;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #1e1e3f;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: #00d4ff;
+        }
+
+        .stat-card .label {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .critical { color: #ff4757; }
+        .high { color: #ff7f50; }
+        .medium { color: #ffa502; }
+        .healthy { color: #00ff88; }
+
+        /* Table */
+        .section {
+            padding: 0 30px 30px;
+        }
+
+        .section h2 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111128;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #1a1a3e;
+            padding: 12px 15px;
+            text-align: left;
+            color: #00d4ff;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #1e1e3f;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #1a1a3e;
+        }
+
+        /* Severity Badges */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge-critical {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        .badge-high {
+            background: rgba(255, 127, 80, 0.2);
+            color: #ff7f50;
+        }
+
+        .badge-medium {
+            background: rgba(255, 165, 2, 0.2);
+            color: #ffa502;
+        }
+
+        .badge-low {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        /* Scan Button */
+        .scan-btn {
+            background: #00d4ff;
+            color: #0a0a1a;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .scan-btn:hover {
+            background: #00b8d4;
+        }
+
+        .scan-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+
+        /* Content area */
+        #content {
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <h1>🦅 Threat<span>Hawk</span></h1>
+        <div class="nav-status">
+            <div class="status-dot"></div>
+            <span id="system-status">Monitoring Active</span>
+            <button class="scan-btn" onclick="triggerScan()">⚡ Scan Now</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <div class="label">Total Events</div>
+                <div class="value healthy" id="total-events">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Total Alerts</div>
+                <div class="value medium" id="total-alerts">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Critical</div>
+                <div class="value critical" id="critical-alerts">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">High</div>
+                <div class="value high" id="high-alerts">0</div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="section">
+            <h2>🚨 Recent Alerts</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Severity</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="alerts-table">
+                    <tr>
+                        <td colspan="5" style="text-align:center; color:#666;">
+                            Loading alerts...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "";
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const res = await fetch(API_URL + "/api/dashboard");
+                const data = await res.json();
+
+                document.getElementById("total-events").textContent = data.total_events;
+                document.getElementById("total-alerts").textContent = data.total_alerts;
+                document.getElementById("critical-alerts").textContent = data.critical_alerts;
+                document.getElementById("high-alerts").textContent = data.high_alerts;
+            } catch (err) {
+                console.error("Dashboard load failed:", err);
+            }
+        }
+
+        // Load alerts table
+        async function loadAlerts() {
+            try {
+                const res = await fetch(API_URL + "/api/alerts?limit=20");
+                const alerts = await res.json();
+
+                const tbody = document.getElementById("alerts-table");
+
+                if (alerts.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#666;">No alerts yet. System is clean! ✅</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = alerts.map(alert => `
+                    <tr>
+                        <td>${new Date(alert.created_at).toLocaleString()}</td>
+                        <td><span class="badge badge-${alert.severity}">${alert.severity.toUpperCase()}</span></td>
+                        <td>${alert.title}</td>
+                        <td>${alert.status}</td>
+                        <td>${(alert.threat_score * 100).toFixed(0)}%</td>
+                    </tr>
+                `).join("");
+            } catch (err) {
+                console.error("Alerts load failed:", err);
+            }
+        }
+
+        // Trigger manual scan
+        async function triggerScan() {
+            const btn = document.querySelector(".scan-btn");
+            btn.disabled = true;
+            btn.textContent = "⏳ Scanning...";
+
+            try {
+                const res = await fetch(API_URL + "/api/scan", { method: "POST" });
+                const data = await res.json();
+                alert(data.message);
+                loadDashboard();
+                loadAlerts();
+            } catch (err) {
+                alert("Scan failed!");
+            }
+
+            btn.disabled = false;
+            btn.textContent = "⚡ Scan Now";
+        }
+
+        // Auto refresh every 10 seconds
+        loadDashboard();
+        loadAlerts();
+        setInterval(() => {
+            loadDashboard();
+            loadAlerts();
+        }, 10000);
+    </script>
+</body>
+</html>

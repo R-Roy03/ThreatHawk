@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Secrets (NEVER commit!)
+.env
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+logs/*.log
+
+# ML Models
+src/ml/saved_models/*.pkl
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/

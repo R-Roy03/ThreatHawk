@@ -1,145 +1,203 @@
+<div align="center">
+
 # 🦅 ThreatHawk
 
-**AI-Powered Endpoint Detection & Response (EDR) System**
+### AI-Powered Endpoint Detection & Response (EDR) System
 
-ThreatHawk is a real-time security monitoring agent that detects suspicious activities on your system using rule-based analysis and machine learning.
-
----
-
-## 🎯 Features
-
-- Process Monitoring — Detects suspicious processes (mimikatz, keylogger, etc.)
-- Network Monitoring — Flags connections to suspicious ports & port scans
-- File Integrity — Watches for suspicious file changes (.exe, .bat, .ps1)
-- System Metrics — Tracks CPU, memory, disk usage in real-time
-- ML Anomaly Detection — Isolation Forest algorithm to find unusual behavior
-- Threat Scoring — Automatic 0.0 to 1.0 threat scoring for every event
-- REST API — Full FastAPI backend with Swagger documentation
-- Live Dashboard — Dark-themed real-time security dashboard
-- One-Click Scan — Manual scan trigger from dashboard
+Real-time threat monitoring with ML-based anomaly detection, live dashboard & REST API.
 
 ---
 
-## 🛠️ Tech Stack
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![ML](https://img.shields.io/badge/ML-IsolationForest-orange)
+![SQLite](https://img.shields.io/badge/Database-SQLite-lightgrey)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-| Component | Technology |
-|----------|-----------|
-| Backend | Python 3.10+ |
-| API Framework | FastAPI |
-| Database | SQLite + SQLAlchemy (Async) |
-| ML Engine | scikit-learn (Isolation Forest) |
-| Frontend | HTML, CSS, JavaScript |
-| Monitoring | psutil, watchdog |
-| Auth Ready | python-jose (JWT) |
+</div>
 
 ---
 
-## 📂 Project Structure
+## 🚀 Overview
 
-ThreatHawk/
-├── main.py                     # Entry point
-├── requirements.txt           # Dependencies
-├── config/
-│   └── default.yaml           # Configuration
-├── src/
-│   ├── core/
-│   │   ├── config.py          # Settings management
-│   │   ├── constants.py       # All constants
-│   │   ├── exceptions.py      # Custom errors
-│   │   └── engine.py          # Main engine
-│   ├── collectors/
-│   │   ├── base_collector.py
-│   │   ├── process_collector.py
-│   │   ├── network_collector.py
-│   │   ├── file_collector.py
-│   │   └── system_collector.py
-│   ├── analyzers/
-│   │   ├── threat_scorer.py
-│   │   └── event_analyzer.py
-│   ├── ml/
-│   │   └── models/
-│   │       └── anomaly_detector.py
-│   ├── api/
-│   │   ├── app.py
-│   │   ├── routes/
-│   │   │   ├── routes.py
-│   │   │   └── dashboard.py
-│   │   └── schemas/
-│   │       └── schemas.py
-│   ├── database/
-│   │   ├── connection.py
-│   │   └── models.py
-│   ├── dashboard/
-│   │   └── templates/
-│   │       └── base.html
-│   └── utils/
-│       ├── logger.py
-│       └── helpers.py
-└── tests/
+ThreatHawk is a modern Endpoint Detection & Response (EDR) platform designed to monitor system activity in real time and detect suspicious behavior using rule-based analysis combined with machine learning.
+
+It continuously collects system telemetry, analyzes events, detects anomalies, assigns threat scores, and provides actionable alerts via a live dashboard and REST API.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Key Features
 
-### 1. Clone the repo
-
-git clone https://github.com/R-Roy03/ThreatHawk.git
-cd ThreatHawk
-
-### 2. Setup virtual environment
-
-python -m venv venv
-
-Windows:
-venv\Scripts\activate
-
-Linux/Mac:
-source venv/bin/activate
-
-### 3. Install dependencies
-
-pip install -r requirements.txt
-
-### 4. Run the application
-
-python main.py
-
-### 5. Open in browser
-
-Dashboard: http://localhost:8000/dashboard  
-API Docs:  http://localhost:8000/docs
-
----
-
-## 📡 API Endpoints
-
-GET    /                     — Health check  
-GET    /api/dashboard        — Dashboard stats  
-GET    /api/events           — All security events  
-GET    /api/events/{id}      — Single event  
-GET    /api/alerts           — All alerts  
-PUT    /api/alerts/{id}      — Update alert status  
-POST   /api/scan             — Trigger manual scan  
-GET    /dashboard            — Web dashboard  
+✅ Real-time process monitoring  
+✅ Network connection inspection  
+✅ File integrity monitoring  
+✅ ML anomaly detection (Isolation Forest)  
+✅ Threat scoring engine  
+✅ FastAPI backend with Swagger docs  
+✅ Live security dashboard  
+✅ Manual scan trigger  
+✅ SQLite event storage  
+✅ Modular security engine  
 
 ---
 
 ## 🧠 How It Works
 
-1. COLLECT  → Collectors scan processes, network, files  
-2. ANALYZE  → Threat scorer evaluates each event  
-3. DETECT   → ML model flags anomalies  
-4. ALERT    → High-score events become alerts  
-5. DISPLAY  → Dashboard shows everything in real-time  
+```
+Collect → Analyze → Detect → Score → Alert → Visualize
+```
+
+1. Collectors monitor system processes, network, files, and metrics  
+2. Analyzer evaluates behavior patterns  
+3. ML model detects anomalies  
+4. Threat scorer assigns risk score  
+5. Alerts generated for suspicious activity  
+6. Dashboard displays events in real time  
+
+---
+
+## 🏗 Architecture
+
+```
+System Sensors
+     ↓
+Collectors Layer
+     ↓
+Analysis Engine
+     ↓
+ML Detection
+     ↓
+Threat Scoring
+     ↓
+Database + API
+     ↓
+Dashboard
+```
+
+---
+
+## 🛠 Tech Stack
+
+- Python 3.10+
+- FastAPI
+- SQLite
+- SQLAlchemy (Async)
+- scikit-learn
+- psutil
+- watchdog
+- HTML / CSS / JavaScript
+
+---
+
+## 📂 Project Structure
+
+```
+ThreatHawk/
+├── main.py
+├── requirements.txt
+├── config/
+├── src/
+│   ├── collectors/
+│   ├── analyzers/
+│   ├── ml/
+│   ├── api/
+│   ├── database/
+│   ├── dashboard/
+│   └── utils/
+└── tests/
+```
+
+---
+
+## ⚡ Quick Start
+
+### Clone Repository
+
+```bash
+git clone https://github.com/yourusername/ThreatHawk.git
+cd ThreatHawk
+```
+
+### Setup Environment
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run Application
+
+```bash
+python main.py
+```
+
+---
+
+## 🌐 Access
+
+Dashboard → http://localhost:8000/dashboard  
+API Docs → http://localhost:8000/docs  
+
+---
+
+## 📡 API Endpoints
+
+| Method | Endpoint | Description |
+|-------|---------|------------|
+| GET | / | Health check |
+| GET | /api/events | Security events |
+| GET | /api/alerts | Alerts |
+| POST | /api/scan | Manual scan |
+| GET | /dashboard | Dashboard |
+
+---
+
+## 🔒 Use Cases
+
+- Malware detection research
+- Blue team monitoring
+- SOC simulation
+- Cybersecurity learning
+- Endpoint security experiments
+- Threat hunting practice
+
+---
+
+## 🧪 Future Improvements
+
+- SIEM integration
+- Alert notifications (Slack / Email)
+- Multi-agent deployment
+- Cloud monitoring support
+- Behavior baselining
+- Threat intelligence feeds
+- RBAC authentication
+- Docker deployment
 
 ---
 
 ## 👤 Author
 
-Rakesh Raushan
+**Rakesh Raushan**
+
 
 ---
 
 ## 📜 License
 
 MIT License
+
+---
+
+<div align="center">
+
+⭐ If you like this project, consider giving it a star!
+
+</div>
